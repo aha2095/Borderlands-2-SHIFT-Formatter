@@ -1,54 +1,51 @@
+/*jslint white: true, browser: true, plusplus: true, newcap: true*/
+
 //Ok so I have to read what's being input then check it against my records which is in local storage and then output what isn't in the records
 
 //planned feature scrape orcz page for keys and compare it to what's in storage and tell you the keys to use for both PC, xbox and PS3.
 
 function keysHandler() {
     
-    var shiftInput, results, temporaryKeys, usedKeys, i, j, k, completeKeys;
+    var results, temporaryKeys, usedKeys, completeKeys, i, j, k;
     
     this.clearHyphens = function(shiftInput) {
         
         shiftInput = document.getElementById('shiftInput').value;
-        console.log("Retrieved keys");
         
         shiftInput = shiftInput.toUpperCase();
-        console.log("Input now in uppercase");
         
         shiftInput = shiftInput.replace(/-/gi, "");
-        console.log("Removed hyphens");
         
         return shiftInput;
 
     }
     
-    this.generateTempKeys = function(temporaryKeys) {
+    this.generateTempKeys = function(shiftInput) {
         
-        temporaryKeys = shiftInput.split('\n');
-        console.log("Temporary array generated");
+        shiftInput = shiftInput.split('\n');
         
-        return temporaryKeys;
+        return shiftInput;
     }
     
     this.storeKeys = function(completeKeys) {
         
-        localStorage["completeKeys"] = JSON.stringify(completeKeys);
-        console.log("Keys stored");
+        localStorage.completeKeys = JSON.stringify(completeKeys);
         
         return 1;
     }
     
     this.retrieveKeys = function() {
         
-        usedKeys = JSON.parse(localStorage["completeKeys"]);
-        console.log("Keys retrieved");
+        usedKeys = JSON.parse(localStorage.ompleteKeys);
         
         if (typeof usedKeys[i] !== 'undefined' && usedKeys[i] !== null) {
-        this.storeKeys(temporaryKeys);
+            this.storeKeys(temporaryKeys);
         }
         return usedKeys;
     }
     
     this.compareKeys = function(temporaryKeys, usedKeys) {
+        
         for (k = 0; k < temporaryKeys.length; k++) {
             for (j = 0; j < usedKeys.length; j++) {
                 if (temporaryKeys[i].Id !== usedKeys[j].Id ) {
@@ -64,7 +61,6 @@ function keysHandler() {
         
         results = document.getElementById("results");
         results.innerHTML = shiftInput;
-        console.log("Keys output");
         
         return 1;
     }
@@ -74,8 +70,11 @@ function keysHandler() {
 var keysHandler = new keysHandler();
 
 setInterval(function() {
+    
     var shiftInput, temporaryKeys;
-    shiftinput = keysHandler.clearHyphens();
+    
+    shiftInput = keysHandler.clearHyphens();
     temporaryKeys = keysHandler.generateTempKeys(shiftInput);
     keysHandler.outputKeys();
+    
 }, 150);
