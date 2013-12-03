@@ -6,14 +6,12 @@
 
 function keysHandler() {
     
-    var results, temporaryKeys, usedKeys, completeKeys, i, j, k;
+    var shiftInput, results, temporaryKeys, unusedKeys, usedKeys, completeKeys, i, j, k, l;
     
-    this.clearHyphens = function(shiftInput) {
+    this.clearHyphens = function() {
         
         shiftInput = document.getElementById('shiftInput').value;
-        
         shiftInput = shiftInput.toUpperCase();
-        
         shiftInput = shiftInput.replace(/-/gi, "");
         
         return shiftInput;
@@ -27,16 +25,9 @@ function keysHandler() {
         return shiftInput;
     }
     
-    this.storeKeys = function(completeKeys) {
-        
-        localStorage.completeKeys = JSON.stringify(completeKeys);
-        
-        return 1;
-    }
-    
     this.retrieveKeys = function() {
         
-        usedKeys = JSON.parse(localStorage.ompleteKeys);
+        usedKeys = JSON.parse(localStorage.completeKeys);
         
         if (typeof usedKeys[i] !== 'undefined' && usedKeys[i] !== null) {
             this.storeKeys(temporaryKeys);
@@ -49,7 +40,11 @@ function keysHandler() {
         for (k = 0; k < temporaryKeys.length; k++) {
             for (j = 0; j < usedKeys.length; j++) {
                 if (temporaryKeys[i].Id !== usedKeys[j].Id ) {
+                    
+                    unusedKeys.push = temporaryKeys[i];
                     completeKeys.push(temporaryKeys[i]);
+                    
+                    return unusedKeys;
                 }
             }
         }
@@ -57,10 +52,21 @@ function keysHandler() {
         return 1;
     }
     
-    this.outputKeys = function(shiftInput) {
+    this.storeKeys = function(completeKeys) {
+        
+        localStorage.completeKeys = JSON.stringify(completeKeys);
+        
+        return 1;
+    }
+    
+    this.outputKeys = function(unusedKeys) {
         
         results = document.getElementById("results");
-        results.innerHTML = shiftInput;
+        
+        for (l = 0; l < unusedKeys; l++) {
+            
+            results.innerHTML = unusedKeys[l];  
+        }
         
         return 1;
     }
@@ -71,10 +77,23 @@ var keysHandler = new keysHandler();
 
 setInterval(function() {
     
-    var shiftInput, temporaryKeys;
+    var shiftInput, temporaryKeys, usedKeys, unusedKeys, comparitiveArray, i;
     
-    shiftInput = keysHandler.clearHyphens();
-    temporaryKeys = keysHandler.generateTempKeys(shiftInput);
-    keysHandler.outputKeys();
+    for (i = 0; i < comparitiveArray; i++) {
+        
+        shiftInput = keysHandler.clearHyphens();
+        
+        comparitiveArray.push(shiftInput);
+        
+        if(comparitiveArray[i] === comparitiveArray[i]++) {
+            
+            temporaryKeys = keysHandler.generateTempKeys(shiftInput);
+            usedKeys = keysHandler.retrieveKeys();
+            unusedKeys = keysHandler.compareKeys(temporaryKeys, usedKeys);
+            keysHandler.outputKeys(unusedKeys);
+        }
+    }
+    
+    
     
 }, 150);
