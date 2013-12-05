@@ -79,19 +79,14 @@ setInterval(function() {
     
     var shiftInput, temporaryKeys, usedKeys, unusedKeys, comparitiveArray, i;
     
-    for (i = 0; i < comparitiveArray; i++) {
+    shiftInput = keysHandler.clearHyphens();
+    temporaryKeys = keysHandler.generateTempKeys(shiftInput);
+    
+    while(temporaryKeys[i]-- !== temporaryKeys[i]) {
         
-        shiftInput = keysHandler.clearHyphens();
-        
-        comparitiveArray.push(shiftInput);
-        
-        if(comparitiveArray[i] === comparitiveArray[i]++) {
-            
-            temporaryKeys = keysHandler.generateTempKeys(shiftInput);
-            usedKeys = keysHandler.retrieveKeys();
-            unusedKeys = keysHandler.compareKeys(temporaryKeys, usedKeys);
-            keysHandler.outputKeys(unusedKeys);
-        }
+        usedKeys = keysHandler.retrieveKeys();
+        unusedKeys = keysHandler.compareKeys(temporaryKeys, usedKeys);
+        keysHandler.outputKeys(unusedKeys);
     }
     
     
