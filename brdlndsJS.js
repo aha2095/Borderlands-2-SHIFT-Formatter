@@ -4,45 +4,64 @@
 
 //planned feature scrape orcz page for keys and compare it to what's in storage and tell you the keys to use for both PC, xbox and PS3.
 
-function keysHandler() {
-    
-    var shiftInput, results, temporaryKeys, unusedKeys, usedKeys, completeKeys, i, j, k, l;
-    
-    this.clearHyphens = function() {
-        
-        shiftInput = document.getElementById('shiftInput').value;
-        shiftInput = shiftInput.toUpperCase();
-        shiftInput = shiftInput.replace(/-/gi, "");
-        
-        return shiftInput;
+//----------------------------------------------------
 
-    }
+//So I've screwed around, I shouldn't have changed my code style mid way through the project so instead I'm going to throw all of this away and redo this in dart since it seems to suit me better, I may come back to this at some point but it's doubtfull, look at my other repos to see this in dart assuming it gets done.
+
+//----------------------------------------------------
+
+var keysHandler = {
     
-    this.generateTempKeys = function(shiftInput) {
+    shiftInput: "", 
+    results: "", 
+    temporaryKeys: [], 
+    unusedKeys: [], 
+    usedKeys: [],
+    
+    prevVisit: function() {
         
-        shiftInput = shiftInput.split('\n');
+        if(localStorage.prevVisit === 0) {
+            
+            usedKeys.push("a");
+            localStorage.prevVisit++;
+        }
+        
+        return localStorage.prevVisit;
+    },
+    
+    clearHyphens: function() {
+        
+        shiftInput: document.getElementById('shiftInput').value;
+        shiftInput: shiftInput.toUpperCase();
+        shiftInput: shiftInput.replace(/-/gi, "");
         
         return shiftInput;
-    }
+    },
     
-    this.retrieveKeys = function() {
+    generateTempKeys: function(shiftInput) {
         
-        usedKeys = JSON.parse(localStorage.completeKeys);
+        shiftInput: shiftInput.split('\n');
         
-        if (typeof usedKeys[i] !== 'undefined' && usedKeys[i] !== null) {
-            this.storeKeys(temporaryKeys);
-        }
+        return shiftInput;
+    },
+    
+    retrieveKeys: function() {
+        
+        usedKeys = JSON.parse(localStorage.usedKeys);
+        
         return usedKeys;
-    }
+    },
     
-    this.compareKeys = function(temporaryKeys, usedKeys) {
+    compareKeys: function(temporaryKeys, usedKeys) {
         
-        for (k = 0; k < temporaryKeys.length; k++) {
+        var i, j;
+        
+        for (i = 0; i < temporaryKeys.length; i++) {
             for (j = 0; j < usedKeys.length; j++) {
                 if (temporaryKeys[i].Id !== usedKeys[j].Id ) {
                     
                     unusedKeys.push = temporaryKeys[i];
-                    completeKeys.push(temporaryKeys[i]);
+                    usedKeys.push(temporaryKeys[i]);
                     
                     return unusedKeys;
                 }
@@ -50,20 +69,22 @@ function keysHandler() {
         }
         
         return 1;
-    }
+    },
     
-    this.storeKeys = function(completeKeys) {
+    storeKeys: function(usedKeys) {
         
-        localStorage.completeKeys = JSON.stringify(completeKeys);
+        localStorage.usedKeys = JSON.stringify(usedKeys);
         
         return 1;
-    }
+    },
     
-    this.outputKeys = function(unusedKeys) {
+    outputKeys: function(unusedKeys) {
+        
+        var i;
         
         results = document.getElementById("results");
         
-        for (l = 0; l < unusedKeys; l++) {
+        for (i = 0; i < unusedKeys; i++) {
             
             results.innerHTML = unusedKeys[l];  
         }
@@ -73,17 +94,16 @@ function keysHandler() {
 
 }
 
-var keysHandler = new keysHandler();
-
 setInterval(function() {
     
-    var shiftInput, temporaryKeys, usedKeys, unusedKeys, comparitiveArray, i;
+    var shiftInput, temporaryKeys, prevVisit, usedKeys, unusedKeys, comparitiveArray, i;
     
     shiftInput = keysHandler.clearHyphens();
     temporaryKeys = keysHandler.generateTempKeys(shiftInput);
     
     while(temporaryKeys[i]-- !== temporaryKeys[i]) {
         
+        prevVisit = keysHandler.prevVisit();
         usedKeys = keysHandler.retrieveKeys();
         unusedKeys = keysHandler.compareKeys(temporaryKeys, usedKeys);
         keysHandler.outputKeys(unusedKeys);
